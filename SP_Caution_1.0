@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         SP Caution ⭐
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  編集画面の自動保存
+// @name        SP Caution ⭐
+// @namespace        http://tampermonkey.net/
+// @version        1.0
+// @description        編集画面の自動保存
 // @author        Ameblo Writer User
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdatedraft.do
 // @match        https://blog.ameba.jp/ucs/entry/srventryinsertinput.do
 // @match        https://blog.ameba.jp/ucs/entry/srventrylist*
-// @grant         none
+// @grant        none
 // @updateURL        https://github.com/personwritep/SP_Caution/raw/main/SP_Caution.user.js
 // @downloadURL        https://github.com/personwritep/SP_Caution/raw/main/SP_Caution.user.js
 // ==/UserScript==
