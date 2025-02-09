@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        SP Caution ⭐
 // @namespace        http://tampermonkey.net/
-// @version        1.0
+// @version        1.1
 // @description        編集画面の自動保存
 // @author        Ameblo Writer User
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
@@ -153,7 +153,7 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
 
 
         draft.onclick=function(event){
-            if(!event.ctrlKey){ //「下書き保存の確認画面」を表示する
+            if(!event.ctrlKey && !event.shiftKey){ //「下書き保存の確認画面」を表示する
                 localStorage.setItem('SP_save', 1); // 確認フラグをセット
                 clearTimeout(alarm);
                 auto_request();
@@ -178,7 +178,10 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
                     let entry_id=document.querySelector('input[name="entry_id"]');
                     localStorage.setItem('SP_id', entry_id.value); // 記事IDの検索フラグをセット
 
-                    window.open(entylist_url); //「記事の編集・削除」を開く
+                    if(event.ctrlKey){
+                        window.open(entylist_url); } //「記事の編集・削除」を開く
+                    else if(event.shiftKey){
+                        window.open(entylist_url,'_blank', 'toolbar=no'); }
                 }, 200); }
 
         } // draft.onclick()
