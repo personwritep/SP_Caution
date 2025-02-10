@@ -8,6 +8,7 @@
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdatedraft.do
 // @match        https://blog.ameba.jp/ucs/entry/srventryinsertinput.do
 // @match        https://blog.ameba.jp/ucs/entry/srventrylist*
+// @icon        https://www.google.com/s2/favicons?sz=64&domain=ameblo.jp
 // @grant        none
 // @updateURL        https://github.com/personwritep/SP_Caution/raw/main/SP_Caution.user.js
 // @downloadURL        https://github.com/personwritep/SP_Caution/raw/main/SP_Caution.user.js
