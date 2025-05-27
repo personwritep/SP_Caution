@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        SP Caution ⭐
 // @namespace        http://tampermonkey.net/
-// @version        1.1
+// @version        1.2
 // @description        編集画面の自動保存
 // @author        Ameblo Writer User
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
@@ -87,7 +87,8 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
             'margin: auto 0; padding: 1px 2px 0 4px; background: #000; '+
             'border: 1px solid #ccc; border-radius: 4px; -moz-appearance: textfield; } '+
             '#sp_time:hover { z-index: 2; -moz-appearance: unset; } '+
-            'input[type=number]::-webkit-inner-spin-button { margin-top: -1px; } '+
+            'input[type=number]::-webkit-inner-spin-button { '+
+            'height: 21px; margin-top: 1px; } '+
             '#sp_min { position: relative; left: -38px; bottom: -24px; height: 20px; '+
             'margin-right: -36px; font-size: 11px; } '+
             '#sp_min:hover { z-index: -1; } '+
