@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        SP Caution ⭐
 // @namespace        http://tampermonkey.net/
-// @version        1.2
+// @version        1.3
 // @description        編集画面の自動保存
 // @author        Ameblo Writer User
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
@@ -53,9 +53,7 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
     function button_disp(){ // 起動表示と警告ダイアログ
         sessionStorage.setItem("jslord_2", "1"); // 📛
 
-        let lform=document.querySelector('.l-form');
-        let lform_w=(lform.clientWidth)/2;
-
+        let l_main=document.querySelector('.l-main');
 
         let SVG_spch=
             '<svg id="svg_spch" viewBox="0 0 150 150">'+
@@ -75,10 +73,9 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
             '</div>'+
             '<style>'+
             '.p-submit__container > .js-submitButton[publishflg="1"] { background: #000; } '+
-            '#sp_panel { position: fixed; bottom: 100px; z-index: -1; '+
-            'right: calc(50vw - '+ lform_w +'px); padding: 0 10px; '+
-            'font: bold 16px Meiryo; color: #fff; height: 60px; width: 210px; '+
-            'background: #000; border: 1px solid #ccc; border-radius: 4px; '+
+            '#sp_panel { position: absolute; bottom: 8px; right: 0; z-index: -1; '+
+            'height: 60px; width: 204px; padding: 0 10px; font: bold 16px Meiryo; color: #fff; '+
+            'background: #000; border: 1px solid #ccc; border-radius: 6px; '+
             'display: flex; justify-content: space-between; align-content: center; } '+
             '.sp_c { padding: 3px 6px 1px; margin: auto 0; '+
             'border: 1px solid #ccc; border-radius: 4px; cursor: pointer; } '+
@@ -97,7 +94,7 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
             '</style>';
 
         if(!document.querySelector('#sp_panel')){
-            document.body.insertAdjacentHTML('beforeend', disp); }
+            l_main.insertAdjacentHTML('beforeend', disp); }
 
 
         let sp_time=document.querySelector('#sp_time');
@@ -282,8 +279,7 @@ if(path_name.includes('srventryinsertinput')){ // 新規編集の編集画面
     button_disp();
 
     function button_disp(){ // 起動表示と警告ダイアログ
-        let lform=document.querySelector('.l-form');
-        let lform_w=(lform.clientWidth)/2;
+        let l_main=document.querySelector('.l-main');
 
         let disp=
             '<div id="sp_panel">'+
@@ -291,15 +287,14 @@ if(path_name.includes('srventryinsertinput')){ // 新規編集の編集画面
             '</div>'+
             '<style>'+
             '.js-submitButton[publishflg="1"] { background: #000 !important; } '+
-            '#sp_panel { position: fixed; bottom: 100px; z-index: -1; '+
-            'right: calc(50vw - '+ lform_w +'px); padding: 6px 10px 4px; '+
-            'font: normal 16px/20px Meiryo; color: #fff; height: auto; width: 210px; '+
-            'background: #000; border: 1px solid #ccc; border-radius: 4px; '+
-            'display: flex; justify-content: space-between; align-content: center; } '+
+            '#sp_panel { position: absolute; bottom: 8px; right: 0; z-index: -1; '+
+            'height: auto; width: 204px; padding: 6px 10px 4px; font: normal 15px Meiryo; '+
+            'color: #fff; background: #000; border: 1px solid #ccc; border-radius: 6px; '+
+            'display: flex; justify-content: center; align-content: center; } '+
             '</style>';
 
         if(!document.querySelector('#sp_panel')){
-            document.body.insertAdjacentHTML('beforeend', disp); }
+            l_main.insertAdjacentHTML('beforeend', disp); }
     } // button_disp()
 
 
