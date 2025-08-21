@@ -220,9 +220,15 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
                 else{
                     draft.style.background='#000'; }}}
 
+
+
+        window.addEventListener('beforeunload', function(event){ // 離脱防止ダイアログ
+            event.preventDefault();
+            event.returnValue=''; });
+
     } // auto_backup()
 
-} // 下書き編集画面
+} // 再編集の編集画面
 
 
 
