@@ -1,0 +1,152 @@
+// ==UserScript==
+// @name         SP Caution ⭐
+// @namespace    http://tampermonkey.net/
+// @version      0.3
+// @description  編集画面の自動保存
+// @author        Ameblo Writer User
+// @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
+// @match        https://blog.ameba.jp/ucs/entry/srventryupdatedraft.do
+// @grant         none
+// ==/UserScript==
+
+
+let sp_set=localStorage.getItem('SPCaution'); // 自動保存間隔 🔵
+if(!sp_set){
+    sp_set=10; }
+localStorage.setItem('SPCaution', sp_set); //  設定を更新 🔵
+
+
+let retry=0;
+let interval=setInterval(wait_target, 100);
+function wait_target(){
+    retry++;
+    if(retry>10){ // リトライ制限 10回 1sec
+        clearInterval(interval); }
+    let target=document.querySelector('.l-gHeaderLeft__link a'); // 監視 target
+    if(target){
+        clearInterval(interval);
+        button_disp();
+        auto_backup();
+    }}
+
+
+
+function button_disp(){ // 起動表示と警告ダイアログ
+
+    let lform=document.querySelector('.l-form');
+    let lform_w=(lform.clientWidth)/2;
+
+
+    let SVG_spch=
+        '<svg id="svg_spch" viewBox="0 0 150 150">'+
+        '<path d="M66 13C56 15 47 18 39 24C-12 60 18 146 82 137C92 135 '+
+        '102 131 110 126C162 90 128 4 66 13M68 25C131 17 145 117 81 125C16 '+
+        '133 3 34 68 25M69 40C61 41 39 58 58 61C66 63 73 47 82 57C84 60 '+
+        '83 62 81 65C77 70 52 90 76 89C82 89 82 84 86 81C92 76 98 74 100 66'+
+        'C105 48 84 37 69 40M70 94C58 99 66 118 78 112C90 107 82 89 70 94z">'+
+        '</path></svg>';
+
+    let disp=
+        '<div id="sp_panel">'+
+        '<span id="sp_save" class="sp_c">SAVE</span>'+
+        '<span id="sp_pass" class="sp_c">PASS</span>'+
+        '<input id="sp_time" type="number" min="2" max="30">'+
+        '<span id="sp_min">min</span>'+ SVG_spch +
+        '</div>'+
+        '<style>'+
+        '.c-button--circle--secondary { background: #000 !important; } '+
+        '#sp_panel { position: fixed; bottom: 100px; z-index: -1; '+
+        'right: calc(50vw - '+ lform_w +'px); padding: 0 10px; '+
+        'font: bold 16px Meiryo; color: #fff; height: 60px; width: 210px; '+
+        'background: #000; border: 1px solid #ccc; border-radius: 4px; '+
+        'display: flex; justify-content: space-between; align-content: center; } '+
+        '.sp_c { padding: 3px 6px 1px; margin: auto 0; '+
+        'border: 1px solid #ccc; border-radius: 4px; cursor: pointer; } '+
+        '.sp_c:hover { background: #b0bec5; } '+
+        '#sp_time { position: relative; height: 27px; width: 48px; '+
+        'margin: auto 0; padding: 1px 2px 0 4px; background: #000; '+
+        'border: 1px solid #ccc; border-radius: 4px; -moz-appearance: textfield; } '+
+        '#sp_time:hover { z-index: 2; -moz-appearance: unset; } '+
+        'input[type=number]::-webkit-inner-spin-button { margin-top: -1px; } '+
+        '#sp_min { position: relative; left: -38px; bottom: -24px; height: 20px; '+
+        'margin-right: -36px; font-size: 11px; } '+
+        '#sp_min:hover { z-index: -1; } '+
+        '#svg_spch { height: 16px; margin: 28px -4px 0 -2px; fill: #fff; '+
+        'cursor: pointer; }'+
+        '</style>';
+
+    if(!document.querySelector('#sp_panel')){
+        document.body.insertAdjacentHTML('beforeend', disp); }
+
+
+    let sp_time=document.querySelector('#sp_time');
+    if(sp_time){
+        sp_time.value=sp_set; }
+
+
+    let help=document.querySelector('#svg_spch');
+    if(help){
+        help.onclick=function(){
+            let url='https://ameblo.jp/personwritep/entry-12770480518.html';
+            window.open(url, '_blank'); }}
+
+} // button_disp()
+
+
+
+function auto_backup(){
+    let sp_panel=document.querySelector('#sp_panel');
+    let sp_save=document.querySelector('#sp_save');
+    let sp_pass=document.querySelector('#sp_pass');
+    let secondary=document.querySelector('.c-button--circle--secondary');
+    let sp_time=document.querySelector('#sp_time');
+
+    let alarm;
+
+    auto_request();
+
+    function auto_request(){
+        alarm=setTimeout(()=>{
+            save(); }, sp_set*60000); } // 自動タイマー設定 🔴
+
+
+    function save(){
+        sp_panel.style.zIndex='20';
+
+        sp_save.onclick=function(){
+            secondary.click(); }
+
+        sp_pass.onclick=function(){
+            sp_panel.style.zIndex='-1';
+            auto_request(); }}
+
+
+    sp_time.addEventListener('input', function(){
+        sp_set=sp_time.value;
+        localStorage.setItem('SPCaution', sp_set); }); //  設定を更新 🔵
+
+
+    secondary.oncontextmenu=function(){
+        clearTimeout(alarm);
+        save();
+        return false; }
+
+
+    secondary.onclick=function(){
+        clearTimeout(alarm);
+        auto_request(); }
+
+} // auto_backup()
+
+
+
+let path_name=location.pathname;
+if(path_name.includes('srventryupdatedraft.do')){ // 下書き保存確認画面
+    let Complete=document.querySelector('.entryComplete');
+    if(Complete){
+        let sp_panel=window.opener.document.querySelector('#sp_panel');
+        if(sp_panel){
+            sp_panel.style.zIndex='-1';
+            window.close(); }}
+
+} // 下書き保存確認画面
