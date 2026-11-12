@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        SP Caution ⭐
 // @namespace        http://tampermonkey.net/
-// @version        1.4
+// @version        1.5
 // @description        編集画面の自動保存
 // @author        Ameblo Writer User
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
@@ -13,6 +13,9 @@
 // @updateURL        https://github.com/personwritep/SP_Caution/raw/main/SP_Caution.user.js
 // @downloadURL        https://github.com/personwritep/SP_Caution/raw/main/SP_Caution.user.js
 // ==/UserScript==
+
+
+let listen=Symbol();
 
 
 let sp_save=localStorage.getItem('SP_save'); // 保存確認フラグ 🔵
@@ -140,9 +143,9 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
                 auto_request(); }}
 
 
-        sp_time.addEventListener('input', function(){
+        sp_time.oninput=()=>{
             sp_set=sp_time.value;
-            localStorage.setItem('SPCaution', sp_set); }); //  設定を更新 🔵
+            localStorage.setItem('SPCaution', sp_set); } //  設定を更新 🔵
 
 
         draft.oncontextmenu=function(){
@@ -225,8 +228,12 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
         let safe=0;
 
         let submitButton=document.querySelectorAll('.js-submitButton');
-        submitButton[0].addEventListener("mousedown", end_check, false);
-        submitButton[1].addEventListener("mousedown", end_check, false);
+        if(!submitButton[0][listen]){
+            submitButton[0].addEventListener("mousedown", end_check, false);
+            submitButton[0][listen]=true; }
+        if(!submitButton[1][listen]){
+            submitButton[1].addEventListener("mousedown", end_check, false);
+            submitButton[1][listen]=true; }
 
         function end_check(){
             safe=1; //「下書き」「投稿」した場合はダイアログ表示を無効にする
@@ -234,11 +241,14 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
                 safe=0;
             }, 20000); } //「下書き」は 20sec後にダイアログ表示を有効に戻す
 
+        if(!window[listen]){
+            window.addEventListener('beforeunload', function(event){ // 離脱防止ダイアログ
+                if(safe==0){
+                    event.preventDefault();
+                    event.returnValue=''; }});
+            window[listen]=true; }
 
-        window.addEventListener('beforeunload', function(event){ // 離脱防止ダイアログ
-            if(safe==0){
-                event.preventDefault();
-                event.returnValue=''; }});
+
 
     } // auto_backup()
 
