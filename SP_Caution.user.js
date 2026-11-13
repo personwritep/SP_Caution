@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        SP Caution ⭐
 // @namespace        http://tampermonkey.net/
-// @version        1.5
+// @version        1.6
 // @description        編集画面の自動保存
 // @author        Ameblo Writer User
 // @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput*
@@ -241,9 +241,21 @@ if(path_name.includes('srventryupdateinput')){ // 再編集の編集画面
                 safe=0;
             }, 20000); } //「下書き」は 20sec後にダイアログ表示を有効に戻す
 
+
+        function amb_check(){ // アメーバデフォルトの離脱警告の有無
+            let dialogue=document.querySelector('.p-historybackModal');
+            if(dialogue){
+                if(window.getComputedStyle(dialogue).display==='block'){
+                    return true; }
+                else{
+                    return false; }}
+            else{
+                return false; }}
+
+
         if(!window[listen]){
             window.addEventListener('beforeunload', function(event){ // 離脱防止ダイアログ
-                if(safe==0){
+                if(safe==0 && !amb_check()){
                     event.preventDefault();
                     event.returnValue=''; }});
             window[listen]=true; }
